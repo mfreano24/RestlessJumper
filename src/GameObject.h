@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <string>
+
 const float GRAVITY = -9.81f;
 
 class GameObject{
@@ -13,8 +15,8 @@ class GameObject{
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
-
-    GameObject(): position(glm::vec3(0)), rotation(glm::vec3(0)), scale(glm::vec3(1)) {}
+    std::string s;
+    GameObject(): position(glm::vec3(0)), rotation(glm::vec3(0)), scale(glm::vec3(1)), s("Hello, Static Variables!") {}
     GameObject(glm::vec3& _pos, glm::vec3& _rot, glm::vec3& _sca): position(_pos), rotation(_rot), scale(_sca) {}
     ~GameObject();
 };
