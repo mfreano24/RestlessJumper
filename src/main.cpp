@@ -22,17 +22,17 @@ using namespace glm;
 
 int main()
 {
-    Game* game = new Game();
+    
     clock_t t;
 
-    game->Awake();
+    Game::Instance().Awake();
     t = clock();
     int TESTER = 10000;
     while(TESTER--){
         t = clock() - t;
-        game->Update(t/100.0f);
+        Game::Instance().Update(t/100.0f);
     }
 
-    cout << t << endl;
+    cout << t/100 << endl;
 
 }

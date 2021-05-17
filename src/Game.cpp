@@ -1,11 +1,6 @@
 #include <iostream>
 #include "Game.h"
 using namespace std;
-//init static variables - this way any pointer to a Game* has the same values in the statics?
-vector<GameObject*> Game::objects;
-vector<Collider*> Game::collision;
-vector<Collider*> Game::triggers;
-Rigidbody* Game::player;
 
 void Game::Awake(){
     //initialize the shape and camera stuff in here?
