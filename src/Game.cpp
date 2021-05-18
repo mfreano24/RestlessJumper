@@ -3,18 +3,19 @@
 using namespace std;
 
 void Game::Awake(){
-    //initialize the shape and camera stuff in here?
+    //initialize the shape, camera, program stuff
+
 }
 
 
 void Game::Render(){
-    //this is where all the rendering will happen, probably.
-    //TODO: need to write program/shape classes.
+    //this function should render to the screen every frame.
 }
 
 void Game::Update(float deltaTime){
-
+    
 
 
     //rendering calls
+    Render();
 }
