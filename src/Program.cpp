@@ -34,10 +34,12 @@ bool Program::init()
 	// Create shader handles
 	GLuint VS = glCreateShader(GL_VERTEX_SHADER);
 	GLuint FS = glCreateShader(GL_FRAGMENT_SHADER);
-	
 	// Read shader sources
+	cerr << vShaderName << endl;
+	cerr << fShaderName << endl;
 	const char *vshader = GLSL::textFileRead(vShaderName.c_str());
 	const char *fshader = GLSL::textFileRead(fShaderName.c_str());
+
 	glShaderSource(VS, 1, &vshader, NULL);
 	glShaderSource(FS, 1, &fshader, NULL);
 	
