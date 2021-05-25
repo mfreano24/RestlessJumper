@@ -4,10 +4,15 @@
 
 #include "Program.h"
 #include "GLSL.h"
-//forward declarations for use in the game class.
-class GameObject;
-class Collider;
-class Rigidbody;
+
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "GameObject.h"
 
 
 enum class Game_State{ STARTUP, GAMEPLAY, GAME_WIN };
@@ -31,8 +36,17 @@ class Game{
     
     std::vector<GameObject*> objects;
     std::vector<Collider*> collision;
+    std::vector<RigidBody*> rigidbodies; //non player rigidbodies
+    RigidBody* player; //NOTE: this pointer should go in the vector above as well so that MoveRigidbodies moves it in scene.
     std::vector<Collider*> triggers;
     std::map<std::string, Program*> programs;
     Game_State state;
-    Rigidbody* player;  
+    RigidBody* player; 
+    float time;
+    float xInput, yInput;
+
+    void Awake();
+    void MoveRigidbodies(float deltatime);
+    void Update(float deltatime);
+    void Render(float deltatime);
 };

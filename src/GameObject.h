@@ -19,6 +19,8 @@ class GameObject{
     GameObject(): position(glm::vec3(0)), rotation(glm::vec3(0)), scale(glm::vec3(1)), name("GameObject") {}
     GameObject(glm::vec3& _pos, glm::vec3& _rot, glm::vec3& _sca): position(_pos), rotation(_rot), scale(_sca) {}
     ~GameObject();
+
+    void Draw();
 };
 
 
@@ -65,5 +67,5 @@ class RigidBody : public Collider{
 
     ~RigidBody();
 
-    void UpdatePosition();
+    void UpdatePosition(float deltatime);
 };
