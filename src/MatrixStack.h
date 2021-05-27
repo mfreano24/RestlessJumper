@@ -14,6 +14,7 @@ class MatrixStack{
     void pushMatrix();
     void popMatrix();
 
+    void loadIdentity();
     void translate(glm::vec3& xyz);
     //rotate around some axis by angle degrees.
     void rotate(float angle, glm::vec3& axis);
