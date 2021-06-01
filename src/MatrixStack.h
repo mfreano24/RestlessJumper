@@ -18,6 +18,7 @@ class MatrixStack{
     void translate(glm::vec3& xyz);
     //rotate around some axis by angle degrees.
     void rotate(float angle, glm::vec3& axis);
+    void rotate(glm::vec3& xyz);
     void scale(glm::vec3& xyz);
 
     glm::mat4 topMatrix() const;

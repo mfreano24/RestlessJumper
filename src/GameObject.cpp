@@ -3,9 +3,24 @@
 using namespace std;
 using namespace glm;
 
-
-void GameObject::Draw(/* MatrixStack* M */){
+void GameObject::Draw(MatrixStack *MV, shared_ptr<Program> prog)
+{
     //use the matrix stack and render the object here
+    //todo: add support for child game objects here, those will prove useful
+    //those can be accomplished by just recursively drawing children.
+
+    //todo: how do i differentiate the programs if they're gonna take different arguments
+
+    if(program_name == "Unlit"){
+        prog->bind();
+        glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, glm::value_ptr(Game::Instance().P));
+        glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+        glUniformMatrix4fv(prog->getUniform("MV_inv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(glm::transpose(MV->topMatrix()))));
+        glUniform3fv(prog->getUniform("kd"), 1, &color[0]);
+        shape->draw(prog);
+        prog->unbind();
+        GLSL::checkError(GET_FILE_LINE);
+    }
 }
 
 bool Collider::CheckCollision(){
@@ -19,8 +34,8 @@ bool Collider::CheckCollision(){
         }
         
         //need top left positions
-        vec3 A = c->position - vec3(c->x_extent, c->y_extent, 0.0);
-        vec3 B = this->position - vec3(this->x_extent, this->y_extent, 0.0);
+        vec3 A = c->position - vec3(c->x_extent, -c->y_extent, 0.0);
+        vec3 B = this->position - vec3(this->x_extent, -this->y_extent, 0.0);
 
         bool collisionX = A.x + 2 * c->x_extent >= B.x && B.x + 2 * this->x_extent >= A.x;
         bool collisionY = A.y + 2 * c->y_extent >= B.y && B.y + 2 * this->y_extent >= A.y;
@@ -33,3 +48,5 @@ bool Collider::CheckCollision(){
 void RigidBody::UpdatePosition(float deltatime){
     position += deltatime * velocity;
 }
+
+

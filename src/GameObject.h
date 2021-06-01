@@ -6,6 +6,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <string>
+#include "MatrixStack.h"
+#include "Program.h"
+#include "Shape.h"
 
 const float GRAVITY = -9.81f;
 
@@ -15,12 +18,23 @@ class GameObject{
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
+    glm::vec3 color;
     std::string name;
-    GameObject(): position(glm::vec3(0)), rotation(glm::vec3(0)), scale(glm::vec3(1)), name("GameObject") {}
-    GameObject(glm::vec3& _pos, glm::vec3& _rot, glm::vec3& _sca): position(_pos), rotation(_rot), scale(_sca) {}
-    ~GameObject();
+    std::string program_name; //TODO: add more shaders than just the standard unlit.
 
-    void Draw();
+    Shape* shape;
+    GameObject(): position(glm::vec3(0)), rotation(glm::vec3(0)), scale(glm::vec3(1)), name("GameObject"), program_name("Unlit"), color(glm::vec3(0.0,0.0,0.0))
+    {
+        shape = new Shape();
+        shape->loadMesh("../../resources/cube.obj"); //TODO: pass this in
+        shape->init();
+        
+    }
+    GameObject(glm::vec3 &_pos, glm::vec3 &_rot, glm::vec3 &_sca) : position(_pos), rotation(_rot), scale(_sca), program_name("Unlit") {}
+    
+    ~GameObject(){}
+
+    void Draw(MatrixStack *MV, std::shared_ptr<Program> prog);
 };
 
 
@@ -45,7 +59,7 @@ class Collider : public GameObject{
     GameObject(_pos, _rot, _sca)
     {}
 
-    ~Collider();
+    ~Collider(){}
 
     bool CheckCollision();
 };
@@ -65,7 +79,7 @@ class RigidBody : public Collider{
     Collider(_pos, _rot, _sca, _x, _y, _t)
     {}
 
-    ~RigidBody();
+    ~RigidBody(){}
 
     void UpdatePosition(float deltatime);
 };

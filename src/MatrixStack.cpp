@@ -45,12 +45,19 @@ void MatrixStack::translate(glm::vec3 &xyz){
 }
 
 //rotate around some axis by angle degrees.
+//using angle-axis for now- if quaternion is more efficient ill switch to it later.
 void MatrixStack::rotate(float angle, glm::vec3 &axis){
     glm::mat4 &top = t->top();
     top *= glm::rotate(glm::mat4(1.0f), angle, axis);
 }
 
-void MatrixStack::scale(glm::vec3 &xyz){
+void MatrixStack::rotate(glm::vec3& xyz){
+    rotate(xyz.x, glm::vec3(1,0,0));
+    rotate(xyz.y, glm::vec3(0,1,0));
+    rotate(xyz.z, glm::vec3(0,0,1));
+}
+
+void MatrixStack::scale(glm::vec3& xyz){
     glm::mat4 &top = t->top();
     top *= glm::scale(glm::mat4(1.0f), xyz);
 }

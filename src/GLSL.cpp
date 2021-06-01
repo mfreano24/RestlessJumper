@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <cassert>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -56,7 +57,7 @@ void checkError(const char *str)
 	GLenum glErr = glGetError();
 	if(glErr != GL_NO_ERROR) {
 		if(str) {
-			printf("%s: ", str);
+			std::cerr << str << std::endl;
 		}
 		printf("GL_ERROR = %s.\n", errorString(glErr));
 		assert(false);

@@ -39,9 +39,9 @@ class Game{
     std::vector<RigidBody*> rigidbodies; //non player rigidbodies
     RigidBody* player; //NOTE: this pointer should go in the vector above as well so that MoveRigidbodies moves it in scene.
     std::vector<Collider*> triggers;
-    std::map<std::string, Program*> programs;
+    std::map<std::string, std::shared_ptr<Program>> programs;
     Game_State state;
-    RigidBody* player; 
+    glm::mat4 P; //should be the same for everyone
     float time;
     float xInput, yInput;
 

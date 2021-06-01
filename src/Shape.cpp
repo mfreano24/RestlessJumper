@@ -140,7 +140,7 @@ void Shape::draw(const shared_ptr<Program> prog) const
 	glEnableVertexAttribArray(h_pos);
 	glBindBuffer(GL_ARRAY_BUFFER, posBufID);
 	glVertexAttribPointer(h_pos, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
-	
+	GLSL::checkError(GET_FILE_LINE);
 	// Bind normal buffer
 	int h_nor = prog->getAttribute("aNor");
 	if(h_nor != -1 && norBufID != 0) {
@@ -171,86 +171,5 @@ void Shape::draw(const shared_ptr<Program> prog) const
 	glDisableVertexAttribArray(h_pos);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
-	GLSL::checkError(GET_FILE_LINE);
-}
-
-
-
-
-
-
-ProcShape::ProcShape() : posID(0),
-						 norID(0),
-						 indID(0)
-{
-}
-
-ProcShape::~ProcShape()
-{
-}
-
-void ProcShape::initShape(vector<float> &pos, vector<float> &nor, vector<unsigned int> &ind)
-{
-	posBuf = pos;
-	norBuf = nor;
-	indBuf = ind;
-
-	// Send the position array to the GPU
-	glGenBuffers(1, &posID);
-	glBindBuffer(GL_ARRAY_BUFFER, posID);
-	glBufferData(GL_ARRAY_BUFFER, posBuf.size() * sizeof(float), &posBuf[0], GL_STATIC_DRAW);
-
-	// Send the normal array to the GPU
-	if (!norBuf.empty())
-	{
-		glGenBuffers(1, &norID);
-		glBindBuffer(GL_ARRAY_BUFFER, norID);
-		glBufferData(GL_ARRAY_BUFFER, norBuf.size() * sizeof(float), &norBuf[0], GL_STATIC_DRAW);
-	}
-	glGenBuffers(1, &indID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indBuf.size() * sizeof(unsigned int), &indBuf[0], GL_STATIC_DRAW);
-
-	// Unbind the arrays
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	GLSL::checkError(GET_FILE_LINE);
-}
-
-void ProcShape::draw(const shared_ptr<Program> prog) const
-{
 	
-	// Bind position buffer
-	int h_pos = prog->getAttribute("aPos");
-	glEnableVertexAttribArray(h_pos);
-	glBindBuffer(GL_ARRAY_BUFFER, posID);
-	glVertexAttribPointer(h_pos, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
-
-	// Bind normal buffer
-	int h_nor = prog->getAttribute("aNor");
-	if (h_nor != -1 && norID != 0)
-	{
-		glEnableVertexAttribArray(h_nor);
-		glBindBuffer(GL_ARRAY_BUFFER, norID);
-		glVertexAttribPointer(h_nor, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
-	}
-
-	
-
-	// Draw
-	int indCount = indBuf.size();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indID);
-	glDrawElements(GL_TRIANGLES, indCount, GL_UNSIGNED_INT, (void *)0);
-
-	// Disable and unbind
-	if (h_nor != -1)
-	{
-		glDisableVertexAttribArray(h_nor);
-	}
-	glDisableVertexAttribArray(h_pos);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	GLSL::checkError(GET_FILE_LINE);
 }
