@@ -33,7 +33,7 @@ class Game{
     //ensure that no copies ever get made.
     Game(Game const &) = delete;
     void operator=(Game const &) = delete;
-    
+    int width, height;
     std::vector<GameObject*> objects;
     std::vector<Collider*> collision;
     std::vector<RigidBody*> rigidbodies; //non player rigidbodies

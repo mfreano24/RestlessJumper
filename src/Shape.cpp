@@ -136,11 +136,12 @@ void Shape::init()
 void Shape::draw(const shared_ptr<Program> prog) const
 {
 	// Bind position buffer
+	
 	int h_pos = prog->getAttribute("aPos");
 	glEnableVertexAttribArray(h_pos);
 	glBindBuffer(GL_ARRAY_BUFFER, posBufID);
 	glVertexAttribPointer(h_pos, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
-	GLSL::checkError(GET_FILE_LINE);
+	
 	// Bind normal buffer
 	int h_nor = prog->getAttribute("aNor");
 	if(h_nor != -1 && norBufID != 0) {

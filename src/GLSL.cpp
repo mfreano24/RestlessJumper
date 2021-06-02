@@ -59,7 +59,7 @@ void checkError(const char *str)
 		if(str) {
 			std::cerr << str << std::endl;
 		}
-		printf("GL_ERROR = %s.\n", errorString(glErr));
+		std::cerr << "GL_ERROR = " << errorString(glErr) << std::endl;
 		assert(false);
 	}
 }

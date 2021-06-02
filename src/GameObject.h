@@ -35,6 +35,15 @@ class GameObject{
     ~GameObject(){}
 
     void Draw(MatrixStack *MV, std::shared_ptr<Program> prog);
+
+    std::vector<float> ConvertColorArray(){
+        //for dealing with the fact that a vec3 isnt accepted here.
+        std::vector<float> ret(3,0.0f);
+        ret[0] = color.r;
+        ret[1] = color.g;
+        ret[2] = color.b;
+        return ret;
+    }
 };
 
 

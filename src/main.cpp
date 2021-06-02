@@ -22,13 +22,14 @@ using namespace glm;
 #include "GLSL.h"
 
 GLFWwindow *window; // Main application window
-
+bool keyToggles[256] = {false};
 /////////////////////////////////////GLFW CALLBACKS/////////////////////////////////////////
 static void error_callback(int error, const char *description)
 {
     cerr << description << endl;
 }
 
+bool new_check = false;
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -37,17 +38,23 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
     }
 
     //movement inputs
-    if(key == GLFW_KEY_D && action == GLFW_PRESS){
-        Game::Instance().xInput = 1.0f;
-    }
-    else if(key == GLFW_KEY_D && action == GLFW_RELEASE){
-        Game::Instance().xInput = 0.0f;
-    }
 
     if(key == GLFW_KEY_A && action == GLFW_PRESS){
         Game::Instance().xInput = -1.0f;
     }
-    else if(key == GLFW_KEY_A && action == GLFW_RELEASE){
+
+    if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+    {
+        Game::Instance().xInput = 0.0f;
+    }
+
+    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+    {
+        Game::Instance().xInput = 1.0f;
+    }
+
+    if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+    {
         Game::Instance().xInput = 0.0f;
     }
 }
@@ -62,8 +69,9 @@ static void cursor_position_callback(GLFWwindow *window, double xmouse, double y
 {
 }
 
-static void char_callback(GLFWwindow *window, unsigned int key)
+static void char_callback(GLFWwindow * window, unsigned int key)
 {
+    keyToggles[key] = !keyToggles[key];
 }
 
 // If the window is resized, capture the new size and reset the viewport
@@ -75,7 +83,7 @@ static void resize_callback(GLFWwindow *window, int width, int height)
 /////////////////////////////////////MAIN THREAD/////////////////////////////////////////
 int main()
 {
-    clock_t t;
+    double t;
 
     glfwSetErrorCallback(error_callback);
 
@@ -85,7 +93,7 @@ int main()
         return -1;
     }
 
-    window = glfwCreateWindow(640, 480, "RESTLESS JUMPER", NULL, NULL);
+    window = glfwCreateWindow(640, 640, "RESTLESS JUMPER", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -121,9 +129,25 @@ int main()
     glfwSetFramebufferSizeCallback(window, resize_callback);
     Game::Instance().Awake();
     t = glfwGetTime();
+
+    float frame_time_min = FLT_MAX;
+    float frame_time_max = -FLT_MAX;
+    float frame_time_avg = 0.0f;
+    float frame_time_tot = 0.0f;
+    long long frames = 0;
     while(!glfwWindowShouldClose(window)){
-        t = glfwGetTime() - t;
-        Game::Instance().Update(t/100.0f);
+        t = glfwGetTime() - frame_time_tot;
+        if(t < frame_time_min){
+            frame_time_min = t;
+        }
+
+        if(t > frame_time_max){
+            frame_time_max = t;
+        }
+
+        frame_time_tot += t;
+        frame_time_avg = frame_time_tot/(++frames);
+        Game::Instance().Update(t);
         // Swap front and back buffers.
         glfwSwapBuffers(window);
         // Poll for and process events.
@@ -132,5 +156,7 @@ int main()
 
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    cerr << "Frame data:\nshortest frame: " << frame_time_min << "s\nlongest frame: " << frame_time_max << "s\navg: " << frame_time_avg << endl;
     return 0;
 }

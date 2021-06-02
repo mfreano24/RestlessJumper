@@ -56,16 +56,19 @@ void Game::Awake()
 
 void Game::Render(float deltatime)
 {
+    
     //this function should render to the screen every frame.
     float t = glfwGetTime();
+    glViewport(0, 0, width, height);
     glClearColor(0.6f, 0.6f, 0.6f, 1.0);
-    glEnable(GL_DEPTH_TEST | GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
 
-
+    GLSL::checkError(GET_FILE_LINE);
     //rendering
     MatrixStack* MV = new MatrixStack();
-    cerr << "Objects size: " << objects.size() << endl;
+    //cerr << "Objects size: " << objects.size() << endl;
     for(auto e : objects){
         //render all of the game objects
         MV->pushMatrix();
@@ -96,7 +99,7 @@ void Game::Update(float deltatime)
     
     //player position
     if(xInput != 0){
-        player->velocity.x = xInput * deltatime;
+        player->velocity.x = xInput * 10.0f;
     }
     
     MoveRigidbodies(deltatime);

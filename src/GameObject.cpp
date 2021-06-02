@@ -13,10 +13,15 @@ void GameObject::Draw(MatrixStack *MV, shared_ptr<Program> prog)
 
     if(program_name == "Unlit"){
         prog->bind();
+        
         glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, glm::value_ptr(Game::Instance().P));
         glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
         glUniformMatrix4fv(prog->getUniform("MV_inv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(glm::transpose(MV->topMatrix()))));
-        glUniform3fv(prog->getUniform("kd"), 1, &color[0]);
+        //TODO: make this neater- perhaps a static function that handles all of this?
+        
+        vector<float> color_arr = ConvertColorArray();
+        glUniform3fv(prog->getUniform("kd"), 1, &color_arr[0]);
+        
         shape->draw(prog);
         prog->unbind();
         GLSL::checkError(GET_FILE_LINE);
